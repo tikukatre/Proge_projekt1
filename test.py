@@ -8,19 +8,29 @@ def summa(a, b):
     except:
         print("Ebaõnnestus")
     f.close()
-s=input("Sisestage summa: ")
+def kulud_tulud(a):
+    f=open("summa.txt", "r")
+    for i in f:
+        n=i.split(";")
+        kj=int(n[0]) #kontojääk
+    kj+=a
+    return kj
+#s=input("Sisestage summa: ")
 
-while True:
-    kuupäev = input("Sisestage kuupäev formaadis pp/kk/aa:")
-    päev,kuu,aasta = kuupäev.split('/')
-    isValidDate = True
-    try :
-        datetime.datetime(int(aasta),int(kuu),int(päev))
-        break
-    except ValueError :
-        isValidDate = False
-        print ("Kuupäev ei ole sobiv..")
-summa(s,kuupäev)
+#while True:
+#    kuupäev = input("Sisestage kuupäev formaadis pp.kk.aa:")
+#    päev,kuu,aasta = kuupäev.split('.')
+#    isValidDate = True
+#    try :
+#        datetime.datetime(int(aasta),int(kuu),int(päev))
+#        break
+#    except ValueError :
+#        isValidDate = False
+#        print ("Kuupäev ei ole sobiv..")
+kt=int(input("Sisestage kulud/tulud: "))
+print(kulud_tulud(kt))
+#summa(s,kuupäev)
+
 
 
     
