@@ -8,15 +8,25 @@ def summa(a, b):
         print("Ebaõnnestus")
     f.close()
     
-def kulud_tulud(a):
+def kulud_tulud(a,b,c):
     f=open("summa.txt", "r")
     for i in f:
         n=i.split(";")
         kj=int(n[0]) #kontojääk
+#    try:
+#        kj+=a
+#        uus_kontojääk=summa(kj,b)
+#        
+#    except:
+#        summa(c,b)
+#        for i in f:
+#            n=i.split(";")
+#            kj=int(n[0])
     kj+=a
-    
+#        uus_kontojääk=summa(kj,b)
+#    uus_kontojääk=summa(kj,b)
+#    return uus_kontojääk
     return kj
-
 
 s=input("Sisestage kontojääk: ")
 
@@ -32,9 +42,10 @@ while True: #kuupäev
         print ("Kuupäev ei ole sobiv..")
         
 kt=int(input("Sisestage kulud/tulud: "))
+summa(s,kuupäev)
+uus_summa=(kulud_tulud(kt, kuupäev,s))
+summa(uus_summa,kuupäev)
 
-print(kulud_tulud(kt))
-#summa(s,kuupäev)
 
 
 
