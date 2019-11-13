@@ -43,7 +43,7 @@ while True: #kuupäev
         
 kt=int(input("Sisestage kulud/tulud: "))
 summa(s,kuupäev)
-uus_summa=(kulud_tulud(kt, kuupäev,s))
+uus_summa=str(kulud_tulud(kt, kuupäev,s))
 summa(uus_summa,kuupäev)
 
 
