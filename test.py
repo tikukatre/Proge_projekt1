@@ -1,3 +1,4 @@
+import datetime
 def summa(a, b):
     f=open("summa.txt", "w+")
     try:
@@ -9,18 +10,18 @@ def summa(a, b):
     f.close()
 s=input("Sisestage summa: ")
 
-kp=input("Sisestage kuupäev: ")
-summa(s,kp)
-f=open("summa.txt", "r")
-for i in f:
-    n=i.split(";")
-    kuupäev=n[1]
-    print(kuupäev)
-#    k=kuupäev.split(".")
-#    kup=[] #kuupäevad listi elementidena
-#    for j in k:
-#        kup.append(j)
-#    print(kup)
+while True:
+    kuupäev = input("Sisestage kuupäev formaadis pp/kk/aa:")
+    päev,kuu,aasta = kuupäev.split('/')
+    isValidDate = True
+    try :
+        datetime.datetime(int(aasta),int(kuu),int(päev))
+        break
+    except ValueError :
+        isValidDate = False
+        print ("Kuupäev ei ole sobiv..")
+summa(s,kuupäev)
+
 
     
 
