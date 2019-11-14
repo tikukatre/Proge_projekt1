@@ -49,7 +49,7 @@ def tagasta_jääk(a):
         
 
 while True:
-    valik=(input("Vali tegevus: (U)us kontojääk, (S)isesta tulud/kulud, (T)agasta kontojääk, (L)õpeta: "))
+    valik=(input("Vali tegevus: (U)us kontojääk, (S)isesta tulud/kulud, (T)agasta kontojääk, (K)ustuta sissekanded, (L)õpeta: "))
     valik=valik.upper()
     if valik=="U":#täiesti uue kontojäägi sisestamine faili
         s=input("Sisestage uus kontojääk: ")
@@ -67,7 +67,16 @@ while True:
             summa(uus_summa,k) #uus summa ja kuupäev
     if valik=="T":#tagastab kontojäägi
         print(tagasta_jääk("summa.txt"))
-        
+    if valik=="K": #Kustutab kõik olemasolevad sissekanded
+        while True:
+            kinnitus=input("Kas olete kindel, et soovite kustutada kõik sissekanded? (J)ah (E)i: ")
+            kinnitus=kinnitus.upper()
+            if kinnitus=="J":
+                open("sissekanded.txt", "w").close()
+                open("summa.txt", "w").close()
+                break
+            else:
+                break
     if valik=="L":#lõpeta 
         break
           
