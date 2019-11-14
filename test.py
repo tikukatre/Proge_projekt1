@@ -1,12 +1,23 @@
 import datetime
 def summa(a, b):
     f=open("summa.txt", "w+")
+    
+    uf=open("sissekanded.txt", "a+")
+    
     try:
-        f.write(a + ";" + b)
+        f.write(a + ";" + (b))
         print("Salvestatud")
     except:
         print("Ebaõnnestus")
     f.close()
+    f=open("summa.txt", "r")
+    
+    try:  #kirjutab andmed teise faili säilitamiseks
+        andmed=f.readline()
+        uf.write(andmed +"\n")
+        uf.close()
+    except:
+        pass
     
 def kulud_tulud(a):
     f=open("summa.txt", "r")
@@ -25,40 +36,42 @@ def kuupäev(k):
         päev,kuu,aasta = k.split('.')
         try :
             datetime.datetime(int(aasta),int(kuu),int(päev))
-            break
+            return(k)
         except ValueError :
-#            print("Kuupäev ei ole sobiv.")
             k=input("Kuupäev ei ole sobiv. Sisestage kuupäev formaadis pp.kk.aa: ")
-            kuupäev(k)
-            break
+            k=kuupäev(k)
+            return(k)
+def tagasta_jääk(a):
+    f=open(a, "r")
+    for i in f:
+        summa_kp=i.strip().split(";")
+        return summa_kp[0]
         
-#    return kj
+
 while True:
-    valik=(input("Vali tegevus: (T)äiesti uus kontojääk, (S)isesta tulud/kulud, (L)õpeta: "))
+    valik=(input("Vali tegevus: (U)us kontojääk, (S)isesta tulud/kulud, (T)agasta kontojääk, (L)õpeta: "))
     valik=valik.upper()
-    if valik=="T":#täiesti uue kontojäägi sisestamine faili
+    if valik=="U":#täiesti uue kontojäägi sisestamine faili
         s=input("Sisestage uus kontojääk: ")
-        kuupäev(input("Sisestage kuupäev formaadis pp.kk.aa: "))
-        summa(s,str(kuupäev))
+        k=(kuupäev(input("Sisestage kuupäev formaadis pp.kk.aa: ")))
+        summa(s,k)
         continue
-    if valik=="S":
+    if valik=="S":#tulude ja kulude sisestamine ja arvestamine olemasolevast kontojäägist
         kt=int(input("Sisestage kulud/tulud: "))
         uus_summa=str(kulud_tulud(kt))
         if uus_summa== "Fail on tühi":
             print("Fail on tühi. Sisestage uus kontojääk")
             pass
         else:
-            kuupäev(input("Sisestage kuupäev formaadis pp.kk.aa: "))
-            summa(uus_summa,str(kuupäev))
-#        summa(uus_summa,kuupäev)
+            k=kuupäev(input("Sisestage kuupäev formaadis pp.kk.aa: "))
+            summa(uus_summa,k) #uus summa ja kuupäev
+    if valik=="T":#tagastab kontojäägi
+        print(tagasta_jääk("summa.txt"))
         
-    if valik=="L":
+    if valik=="L":#lõpeta 
         break
           
-#kt=int(input("Sisestage kulud/tulud: "))
-#summa(s,kuupäev)
-#uus_summa=str(kulud_tulud(kt, kuupäev,s))
-#summa(uus_summa,kuupäev)
+
 
 
 
