@@ -8,36 +8,49 @@ def summa(a, b):
         print("Ebaõnnestus")
     f.close()
     
-def kulud_tulud(a,b,c):
+def kulud_tulud(a):
     f=open("summa.txt", "r")
-    for i in f:
-        n=i.split(";")
-        kj=int(n[0]) #kontojääk
-
-    kj+=a
-
-    return kj
+    try:
+        for i in f:
+            n=i.split(";")
+            kj=int(n[0]) #kontojääk
+        kj+=a
+        return kj
+    except:
+        return("Fail on tühi")
+    
+def kuupäev(k):
+    import datetime
+    while True: #kuupäev
+        päev,kuu,aasta = k.split('.')
+        try :
+            datetime.datetime(int(aasta),int(kuu),int(päev))
+            break
+        except ValueError :
+#            print("Kuupäev ei ole sobiv.")
+            k=input("Kuupäev ei ole sobiv. Sisestage kuupäev formaadis pp.kk.aa: ")
+            kuupäev(k)
+            break
+        
+#    return kj
 while True:
     valik=(input("Vali tegevus: (T)äiesti uus kontojääk, (S)isesta tulud/kulud, (L)õpeta: "))
+    valik=valik.upper()
     if valik=="T":#täiesti uue kontojäägi sisestamine faili
         s=input("Sisestage uus kontojääk: ")
-    
-        while True: #kuupäev
-            kuupäev = input("Sisestage kuupäev formaadis pp.kk.aa: ")
-            päev,kuu,aasta = kuupäev.split('.')
-            isValidDate = True
-            try :
-                datetime.datetime(int(aasta),int(kuu),int(päev))
-                break
-            except ValueError :
-                isValidDate = False
-                print ("Kuupäev ei ole sobiv.")
-        summa(s,kuupäev)
+        kuupäev(input("Sisestage kuupäev formaadis pp.kk.aa: "))
+        summa(s,str(kuupäev))
         continue
     if valik=="S":
         kt=int(input("Sisestage kulud/tulud: "))
-        uus_summa=str(kulud_tulud(kt, kuupäev,s))
-
+        uus_summa=str(kulud_tulud(kt))
+        if uus_summa== "Fail on tühi":
+            print("Fail on tühi. Sisestage uus kontojääk")
+            pass
+        else:
+            kuupäev(input("Sisestage kuupäev formaadis pp.kk.aa: "))
+            summa(uus_summa,str(kuupäev))
+#        summa(uus_summa,kuupäev)
         
     if valik=="L":
         break
