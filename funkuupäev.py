@@ -5,11 +5,13 @@ def kuupäev(k):
         päev,kuu,aasta = k.split('.')
         try :
             datetime.datetime(int(aasta),int(kuu),int(päev))
-            break
+            
+            return(k)
         except ValueError :
-            print("Kuupäev ei ole sobiv.")
-            break
+            k=input("Kuupäev ei ole sobiv. Sisestage kuupäev formaadis pp.kk.aa: ")
+            k=kuupäev(k)
+            return(k)
 
-kuupäev(input("Sisestage kuupäev formaadis pp.kk.aa: "))
+print(kuupäev(input("Sisestage kuupäev formaadis pp.kk.aa: ")))
 
 
