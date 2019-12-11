@@ -16,3 +16,5 @@ while True:
     print('You entered ', values[0])
 
 window.close()
+
+layout =[[sg.Text("Sisestasite" + values[
