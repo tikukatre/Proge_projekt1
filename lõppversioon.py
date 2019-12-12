@@ -42,9 +42,6 @@ def kulud_tulud(a):
         return("Fail on tühi")
     
 def kuupäev(k):
-    import datetime
-#    while True: #kuupäev
-#        päev,kuu,aasta = k.split('.')
     try :
         päev,kuu,aasta = k.split('.')
         datetime.datetime(int(aasta),int(kuu),int(päev))
@@ -53,10 +50,7 @@ def kuupäev(k):
     except ValueError:
         k=sg.PopupGetText("Kuupäev ei ole sobiv.Sisesta kuupäev vormis pp.kk.aa", "")
         return(kuupäev(k))
-#        except:
-#            k=sg.PopupGetText("Kuupäev ei ole sobiv.Sisesta kuupäev vormis pp.kk.aa", "")
-#            k = kuupäev(k)
-#            return(False)
+
 def tagasta_jääk(a):
     f = open(a, "r")
     if os.stat(a).st_size == 0:
@@ -65,8 +59,7 @@ def tagasta_jääk(a):
         summa_kp = i.strip().split(";")
         return summa_kp[0]
 
-        
-    
+           
 #GUI
     
 sg.change_look_and_feel("LightTeal")
@@ -107,9 +100,7 @@ while True:
                 win2.Close()
                 win1.UnHide()
                 break
-
-
-         
+       
     if not win2_active and event=="Tulude/ kulude sisetamine":
         win1.Hide()
         win2_active=True
