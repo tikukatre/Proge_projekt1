@@ -8,21 +8,26 @@ def summa(a, b):
     f = open("summa.txt", "w+")
     
     uf = open("sissekanded.txt", "a+")
-    
     try:
-        f.write(a + ";" + (b))
-        print("Salvestatud")
-    except:
-        print("Ebaõnnestus")
-    f.close()
-    f = open("summa.txt", "r")
-    
-    try:  #kirjutab andmed teise faili säilitamiseks
-        andmed = f.readline()
-        uf.write(andmed +"\n")
-        uf.close()
-    except:
-        pass
+        a=int(a)
+        try:
+            f.write(str(a) + ";" + (b))
+            sg.Popup("Salvestatud")
+        except:
+            sg.Popup("Ebaõnnestus")
+        f.close()
+        f = open("summa.txt", "r")
+        
+        try:  #kirjutab andmed teise faili säilitamiseks
+            andmed = f.readline()
+            uf.write(andmed +"\n")
+            uf.close()
+        except:
+            pass
+    except ValueError:
+        sg.Popup("Palun sisestage kontojääk arvuna.")
+        return(False)
+
     
 def kulud_tulud(a):
     f = open("summa.txt", "r")
@@ -37,16 +42,19 @@ def kulud_tulud(a):
     
 def kuupäev(k):
     import datetime
+    popup_value=False
     while True: #kuupäev
         päev,kuu,aasta = k.split('.')
         try :
             datetime.datetime(int(aasta),int(kuu),int(päev))
             return(k)
-        except ValueError :
-            sg.Popup("Kuupäev ei ole sobiv. Sisestage kuupäev formaadis pp.kk.aa")
-#            k = input("Kuupäev ei ole sobiv. Sisestage kuupäev formaadis pp.kk.aa: ")
+        except ValueError:
+            k=sg.PopupGetText("Kuupäev ei ole sobiv.Sisesta kuupäev vormis pp.kk.aa", "")
+            k = kuupäev(k)
+#        except:
+#            k=sg.PopupGetText("Kuupäev ei ole sobiv.Sisesta kuupäev vormis pp.kk.aa", "")
 #            k = kuupäev(k)
-            return(k)
+#            return(False)
 def tagasta_jääk(a):
     f = open(a, "r")
     if os.stat(a).st_size == 0:
@@ -80,46 +88,61 @@ while True:
         layout2=[[sg.Text("Uus sissekanne")],
                  [sg.Text("Summa"), sg.InputText()],
                  [sg.Text("Sisestage kuupäev formaadis pp.kk.aa: "), sg.InputText()],
-                  [sg.Button("Salvesta"), sg.Button("Lõpeta")]]
+                  [sg.Button("Salvesta"), sg.Button("Tagasi")]]
         win2=sg.Window("Window 2").Layout(layout2)
         while True:
             event2,value2=win2.Read()
-            if event2 is None or event2==("Lõpeta"):
+            if event2 is None or event2==("Tagasi"):
                 win2_active=False
                 win2.Close()
                 win1.UnHide()
                 break
+
             if event2==("Salvesta"):
-                try:
-                    k=kuupäev(value2[1])
-                    summa(value2[0],k)
-                    sg.Popup("Edukalt salvestatud")
-                except:
-                    sg.Popup("Midagi läks valesti")
+                k=kuupäev(value2[1])
+                summa=summa((value2[0]),k)
+                if k!=False and summa!=False:
+                    win2_active=False
+                    win2.Close()
+                    win1.UnHide()
+                    break
+
+
          
     if not win2_active and event=="Tulude/ kulude sisetamine":
         win1.Hide()
         win2_active=True
         layout3=[[sg.Text("Tulude/ kulude sisetamine"), sg.InputText()],
-                  [sg.Button("Lõpeta")]]
-        win3=sg.Window("Window 3").Layout(layout3)
+                 [sg.Text("Sisestage kuupäev formaadis pp.kk.aa: "), sg.InputText()],
+                  [sg.Button("Salvesta"),sg.Button("Tagasi")]]
+        win3=sg.Window("Tulud ja kulud").Layout(layout3)
         while True:
             event2,value2=win3.Read()
-            if event2 is None or event2==("Lõpeta"):
+            if event2 is None or event2==("Tagasi"):
                 win2_active=False
                 win3.Close()
                 win1.UnHide()
                 break
+            if event2=="Salvesta":
+                kt=int(value2[0])
+                uus_summa = str(kulud_tulud(kt))
+                if uus_summa == "Fail on tühi":
+                    sg.Popup("Fail on tühi. Sisestage uus kontojääk")
+                    pass
+                else:
+                    kp=kuupäev(value2[1])
+                    summa(uus_summa,kp)
+                    
             
     if not win2_active and event=="Tagasta kontojääk":
         win1.Hide()
         win2_active=True
         layout4=[[sg.Text("Teie kontojääk:"), sg.Text((tagasta_jääk("summa.txt")))],
-                  [sg.Button("Lõpeta")]]
+                  [sg.Button("Tagasi")]]
         win4=sg.Window("Window 4").Layout(layout4)
         while True:
             event2,value2=win4.Read()
-            if event2 is None or event2==("Lõpeta"):
+            if event2 is None or event2==("Tagasi"):
                 win2_active=False
                 win4.Close()
                 win1.UnHide()
@@ -150,31 +173,3 @@ while True:
                     win1.UnHide() 
 
         
-##        sg.change_look_and_feel('Reddit')
-#        form2 = sg.FlexForm("Uus kontojääk")
-#        layout2=[[sg.Text("Uus kontojääk")],
-#                [sg.Text("Sisestage uus kontojääk"), sg.InputText()],
-#                [sg.Text("Sisestage kuupäev formaadis pp.kk.aa"), sg.InputText()]
-#                 ]
-#        window2=sg.Window("Window 2", layout)
-
-#layout = [
-#          [sg.Text('Palun sisesta oma selle kuu andmed.')],
-#          [sg.Text('Tulud'), sg.InputText()],
-#          [sg.Text('Kulud'), sg.InputText()],
-#          [sg.Text('Kuupäev'), sg.InputText()],
-#          [sg.Submit(), sg.Cancel()]
-#         ]
-#
-#window = sg.Window('Window Title', layout)
-#
-#while True:
-#    event, values = window.read()
-#    if event in (None, 'Cancel'):
-#        break
-#    if values[2]
-#    print(values[0], values[1], values[2])
-#    
-#window.close()
-#
-#layout =[[sg.Text("Teie tulud:" + values[0])]]
