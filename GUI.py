@@ -25,8 +25,9 @@ def summa(a, b):
         except:
             pass
     except ValueError:
-        sg.Popup("Palun sisestage kontojääk arvuna.")
-        return(False)
+        a=sg.PopupGetText("Palun sisestage kontojääk arvuna.","")
+        summa(a,b)
+#        return(False)
 
     
 def kulud_tulud(a):
