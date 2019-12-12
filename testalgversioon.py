@@ -47,9 +47,17 @@ def tagasta_jääk(a):
         summa_kp = i.strip().split(";")
         return summa_kp[0]
         
+def otsi(kp):
+    f =open("sissekanded.txt", "r")
+    for i in f:
+        if kp in i:
+            i=i.strip().split(";")
+            print(i[0])
+            
+    
 
 while True:
-    valik = (input("Vali tegevus: (U)us kontojääk, (S)isesta tulud/kulud, (T)agasta kontojääk, (K)ustuta sissekanded, (L)õpeta: "))
+    valik = (input("Vali tegevus: (U)us kontojääk, (S)isesta tulud/kulud, (T)agasta kontojääk, (K)ustuta sissekanded, (O)tsi, (L)õpeta: "))
     valik = valik.upper()
     if valik == "U":#täiesti uue kontojäägi sisestamine faili
         s = input("Sisestage uus kontojääk: ")
@@ -77,5 +85,9 @@ while True:
                 break
             else:
                 break
+    if valik=="O":
+        kp=input("Sisesta kuupäev")
+        otsi(kp)
+        
     if valik == "L":#lõpeta 
         break

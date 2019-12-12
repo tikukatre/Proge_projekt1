@@ -27,7 +27,7 @@ def summa(a, b):
     except ValueError:
         a=sg.PopupGetText("Palun sisestage kontojääk arvuna.","")
         summa(a,b)
-#        return(False)
+
 
     
 def kulud_tulud(a):
@@ -35,7 +35,7 @@ def kulud_tulud(a):
     try:
         for i in f:
             n = i.split(";")
-            kj = int(n[0]) #kontojääk
+            kj = int(n[0]) 
         kj += a
         return kj
     except:
@@ -58,20 +58,34 @@ def tagasta_jääk(a):
     for i in f:
         summa_kp = i.strip().split(";")
         return summa_kp[0]
+    
+def otsi(kp):
+    f =open("sissekanded.txt", "r")
+    for i in f:
+        if kp in i:
+            i=i.strip().split(";")
+            sg.Popup("Teie kontojääk sellel kuupäeval: " +i[0])
+            return(i[0])
+        else:
+            sg.Popup("Antud kuupäeva ei leitud")
+            break
 
            
 #GUI
     
 sg.change_look_and_feel("LightTeal")
-layout=[[sg.Text("Valige tegevus.")],
-        [sg.Button("Uus kontojääk")],
-        [sg.Button("Tulude/ kulude sisetamine")],
-        [sg.Button("Tagasta kontojääk")],
-        [sg.Button("Kustuta sissekanded")],
-        [sg.Button("Lõpeta")]]
-win1=sg.Window("Window 1").Layout(layout)
+layout=[[sg.Text("Valige tegevus.", size=(50,4))],
+        [sg.Button("Uus kontojääk", size=(50,4))],
+        [sg.Button("Tulude/ kulude sisetamine", size=(50,4))],
+        [sg.Button("Tagasta kontojääk", size=(50,4))],
+        [sg.Button("Otsi kuupäeva järgi", size=(50,4))],
+        [sg.Button("Kustuta sissekanded", size=(50,4))],
+        [sg.Button("Lõpeta", size=(50,4))]]
+
+win1=sg.Window("Rahakalkulaator").Layout(layout)
 win2_active=False
 while True:
+
     event, value =win1.Read()
     if event is None or event=="Lõpeta":
         win1.Close()
@@ -81,10 +95,10 @@ while True:
         win1.Hide()
         win2_active=True
         layout2=[[sg.Text("Uus sissekanne")],
-                 [sg.Text("Summa"), sg.InputText()],
-                 [sg.Text("Sisestage kuupäev formaadis pp.kk.aa: "), sg.InputText()],
-                  [sg.Button("Salvesta"), sg.Button("Tagasi")]]
-        win2=sg.Window("Window 2").Layout(layout2)
+                 [sg.Text("Summa", size=(20,2)), sg.InputText()],
+                 [sg.Text("Sisestage kuupäev formaadis pp.kk.aa: ", size=(20,2)), sg.InputText()],
+                  [sg.Text("",size=(20,1)),sg.Button("Salvesta", size=(15,1)), sg.Button("Tagasi", size=(15,1))]]
+        win2=sg.Window("Uus kontojääk").Layout(layout2)
         while True:
             event2,value2=win2.Read()
             if event2 is None or event2==("Tagasi"):
@@ -104,8 +118,8 @@ while True:
     if not win2_active and event=="Tulude/ kulude sisetamine":
         win1.Hide()
         win2_active=True
-        layout3=[[sg.Text("Tulude/ kulude sisetamine"), sg.InputText()],
-                 [sg.Text("Sisestage kuupäev formaadis pp.kk.aa: "), sg.InputText()],
+        layout3=[[sg.Text("Tulude/ kulude sisetamine", size=(20,2)), sg.InputText()],
+                 [sg.Text("Sisestage kuupäev formaadis pp.kk.aa: ", size=(20,2)), sg.InputText()],
                   [sg.Button("Salvesta"),sg.Button("Tagasi")]]
         win3=sg.Window("Tulud ja kulud").Layout(layout3)
         while True:
@@ -124,14 +138,13 @@ while True:
                 else:
                     kp=kuupäev(value2[1])
                     summa(uus_summa,kp)
-                    
-            
+                          
     if not win2_active and event=="Tagasta kontojääk":
         win1.Hide()
         win2_active=True
-        layout4=[[sg.Text("Teie kontojääk:"), sg.Text((tagasta_jääk("summa.txt")))],
-                  [sg.Button("Tagasi")]]
-        win4=sg.Window("Window 4").Layout(layout4)
+        layout4=[[sg.Text("Teie kontojääk:", size=(20,2)), sg.Text((tagasta_jääk("summa.txt")), size=(20,2))],
+                  [sg.Text("", size=(20,2)),sg.Button("Tagasi")]]
+        win4=sg.Window("Praegune kontojääk").Layout(layout4)
         while True:
             event2,value2=win4.Read()
             if event2 is None or event2==("Tagasi"):
@@ -139,11 +152,27 @@ while True:
                 win4.Close()
                 win1.UnHide()
                 break
+    if not win2_active and event=="Otsi kuupäeva järgi":
+        win1.Hide()
+        win2_active=True
+        layout4=[[sg.Text("Sisetage kuupäev, mille sissekannet soovite näha:", size=(20,2)), sg.InputText()],
+                  [sg.Text("", size=(20,2)),sg.Button("Otsi"), sg.Button("Tagasi")]]
+        win4=sg.Window("Praegune kontojääk").Layout(layout4)
+        while True:
+            event2,value2=win4.Read()
+            if event2 is None or event2==("Tagasi"):
+                win2_active=False
+                win4.Close()
+                win1.UnHide()
+                break
+            if event2=="Otsi":
+                otsi(value2[0])
+                
     if not win2_active and event=="Kustuta sissekanded":
         win1.Hide()
         win2_active=True
         layout5=[[sg.Text("Kas olete kindel, et soovite kustutada kõik sissekanded?")],
-                 [sg.Button("Jah"), sg.Button("Ei")]]
+                 [sg.Text("", size=(15,1)),sg.Button("Jah", size=(15,1)), sg.Button("Ei", size=(15,1))]]
         win5=sg.Window("Sissekannete kustutamine").Layout(layout5)
         while True:
             event2,value2=win5.Read()
