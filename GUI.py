@@ -43,8 +43,9 @@ def kuupäev(k):
             datetime.datetime(int(aasta),int(kuu),int(päev))
             return(k)
         except ValueError :
-            k = input("Kuupäev ei ole sobiv. Sisestage kuupäev formaadis pp.kk.aa: ")
-            k = kuupäev(k)
+            sg.Popup("Kuupäev ei ole sobiv. Sisestage kuupäev formaadis pp.kk.aa")
+#            k = input("Kuupäev ei ole sobiv. Sisestage kuupäev formaadis pp.kk.aa: ")
+#            k = kuupäev(k)
             return(k)
 def tagasta_jääk(a):
     f = open(a, "r")
@@ -77,7 +78,9 @@ while True:
         win1.Hide()
         win2_active=True
         layout2=[[sg.Text("Uus sissekanne")],
-                  [sg.Button("Lõpeta")]]
+                 [sg.Text("Summa"), sg.InputText()],
+                 [sg.Text("Sisestage kuupäev formaadis pp.kk.aa: "), sg.InputText()],
+                  [sg.Button("Salvesta"), sg.Button("Lõpeta")]]
         win2=sg.Window("Window 2").Layout(layout2)
         while True:
             event2,value2=win2.Read()
@@ -86,7 +89,14 @@ while True:
                 win2.Close()
                 win1.UnHide()
                 break
-            
+            if event2==("Salvesta"):
+                try:
+                    k=kuupäev(value2[1])
+                    summa(value2[0],k)
+                    sg.Popup("Edukalt salvestatud")
+                except:
+                    sg.Popup("Midagi läks valesti")
+         
     if not win2_active and event=="Tulude/ kulude sisetamine":
         win1.Hide()
         win2_active=True
